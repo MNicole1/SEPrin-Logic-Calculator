@@ -4,6 +4,7 @@ This is the repo for refactoring exercises done for Dr. Jody Paul's Software Eng
 
 ## Licence
 [Apache-2](https://www.apache.org/licenses/LICENSE-2.0.txt)
+A full copy of the license is provided in the LICENCE.md file
 
 ## Changes
 
