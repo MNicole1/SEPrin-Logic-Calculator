@@ -1,11 +1,12 @@
 package logiccalculator.rpn;
 
 
+import logiccalculator.core.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
-import logiccalculator.core.Constants;
 
 /**
  *
@@ -27,12 +28,12 @@ public class RPNConverter {
             deduction = true;
             String first = expr.substring(0, pos);
             String last = expr.substring(pos + 1);
-            getPremises(first);
-            getConclusions(last);
+            findProcesses(first);
+            findConclusions(last);
         }
     }
 
-    private void getPremises (String first) {
+    private void findProcesses (String first) {
         StringTokenizer st = new StringTokenizer(first, ",");
         premises = new ArrayList<String>();
         while (st.hasMoreTokens()) {
@@ -40,7 +41,7 @@ public class RPNConverter {
         }
     }
 
-    private void getConclusions (String last) {
+    private void findConclusions (String last) {
         StringTokenizer st = new StringTokenizer(last, ",");
         conclusions = new ArrayList<String>();
         while (st.hasMoreTokens()) {
