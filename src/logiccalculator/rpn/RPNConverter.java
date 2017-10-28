@@ -27,18 +27,24 @@ public class RPNConverter {
             deduction = true;
             String first = expr.substring(0, pos);
             String last = expr.substring(pos + 1);
-            /* Get premises */
-            StringTokenizer st = new StringTokenizer(first, ",");
-            premises = new ArrayList<String>();
-            while (st.hasMoreTokens()) {
-                premises.add(st.nextToken());
-            }
-            /* Get conclusions */
-            st = new StringTokenizer(last, ",");
-            conclusions = new ArrayList<String>();
-            while (st.hasMoreTokens()) {
-                conclusions.add(st.nextToken());
-            }
+            getPremises(first);
+            getConclusions(last);
+        }
+    }
+
+    private void getPremises (String first) {
+        StringTokenizer st = new StringTokenizer(first, ",");
+        premises = new ArrayList<String>();
+        while (st.hasMoreTokens()) {
+            premises.add(st.nextToken());
+        }
+    }
+
+    private void getConclusions (String last) {
+        StringTokenizer st = new StringTokenizer(last, ",");
+        conclusions = new ArrayList<String>();
+        while (st.hasMoreTokens()) {
+            conclusions.add(st.nextToken());
         }
     }
 

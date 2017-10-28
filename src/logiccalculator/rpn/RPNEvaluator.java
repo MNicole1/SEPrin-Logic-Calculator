@@ -96,78 +96,14 @@ public class RPNEvaluator {
     }
 
     public boolean[] process(boolean printTruthTable, int initRank, int endRank) {
-        /*
-         * Print truth table:
-         * 
-         * p      q      | ¬p ^ q
-         * ----------------------
-         * true   true   | false
-         * true   false  | false
-         * false  true   | true
-         * false  false  | false
-         * 
-         * 
-         * Better case:
-         * 
-         *     p q | ¬p ^ q
-         *     ----|-------
-         *  1) 1 1 | 0
-         *  2) 1 0 | 0
-         *  3) 0 1 | 1
-         *  4) 0 0 | 0
-         * 
-         */
         numModels = 0;
         boolean[] result = new boolean[numInterpretations];
         boolean[][] tempModelsList = new boolean[numInterpretations][];
         //mainGUI.progressBar.setMinimum(1);
         mainGUI.progressBar.setMaximum(numInterpretations);
         if ( printTruthTable ) {
-            /* Process line number spaces */
-            String blanks = Constants.getBlanksLine(numInterpretations);
-            int trimSpace = blanks.length()-1;
-            /* Print atoms line */
-            Constants.print(blanks + "   ");
-            for (int j = 0; j < numAtoms; j++) {
-                Constants.print(atomsList.get(j) + " ");
-            }
-            /* Print expression */
-            Constants.print("| ");
-            Constants.println(theExpr);
-            /*  Print line separator */
-            Constants.print(blanks + "   ");
-            Constants.printlnLineSeparator(numAtoms, theExpr.length());
-            /* Print truth table */
-            for (int i = initRank; i < endRank; i++) {
-                if (i == 9) {
-                    blanks = blanks.substring(0, trimSpace--);
-                } else if (i == 99) {
-                    blanks = blanks.substring(0, trimSpace--);
-                } else if (i == 999) {
-                    blanks = blanks.substring(0, trimSpace--);
-                } else if (i == 9999) {
-                    blanks = blanks.substring(0, trimSpace--);
-                } else if (i == 99999) {
-                    blanks = blanks.substring(0, trimSpace--);
-                }
-                /* i+1: truthTalble starts at 0 */
-                Constants.printLineNumber(blanks, i+1);
-                for (int j = 0; j < numAtoms; j++) {
-                    Constants.printBoolean(truthTable[i][j]);
-                }
-                /* Print result of interpretation i */
-                Constants.print("| ");
-                result[i] = processInterpretation(truthTable[i]);
-                Constants.printBoolean(result[i]);
-                if (result[i]) {    /* Is model */
-                    Constants.print(Constants.VISUAL_OK);
-                    tempModelsList[numModels] = truthTable[i];
-                    numModels++;
-                }
-                Constants.println();
-                mainGUI.progressBar.setValue(i);
-            }
-        } else {    /* printTruthTable == false */
+            printTruthTable(initRank, endRank, result, tempModelsList);
+        } else {
             for (int i = 0; i < numInterpretations; i++) {
                 result[i] = processInterpretation(truthTable[i]);
                 if (result[i]) {    /* Is model */
@@ -185,7 +121,56 @@ public class RPNEvaluator {
         System.arraycopy(tempModelsList, 0, modelsList, 0, numModels);
         return result;
     }
-    
+
+    private void printTruthTable (int initRank, int endRank, boolean[] result,
+            boolean[][] tempModelsList) {
+            /* Process line number spaces */
+        String blanks = Constants.getBlanksLine(numInterpretations);
+        int trimSpace = blanks.length()-1;
+            /* Print atoms line */
+        Constants.print(blanks + "   ");
+        for (int j = 0; j < numAtoms; j++) {
+            Constants.print(atomsList.get(j) + " ");
+        }
+            /* Print expression */
+        Constants.print("| ");
+        Constants.println(theExpr);
+            /*  Print line separator */
+        Constants.print(blanks + "   ");
+        Constants.printlnLineSeparator(numAtoms, theExpr.length());
+            /* Print truth table */
+        for (int i = initRank; i < endRank; i++) {
+            if (i == 9) {
+                blanks = blanks.substring(0, trimSpace--);
+            } else if (i == 99) {
+                blanks = blanks.substring(0, trimSpace--);
+            } else if (i == 999) {
+                blanks = blanks.substring(0, trimSpace--);
+            } else if (i == 9999) {
+                blanks = blanks.substring(0, trimSpace--);
+            } else if (i == 99999) {
+                blanks = blanks.substring(0, trimSpace--);
+            }
+            /* i+1: truthTalble starts at 0 */
+            Constants.printLineNumber(blanks, i+1);
+            for (int j = 0; j < numAtoms; j++) {
+                Constants.printBoolean(truthTable[i][j]);
+            }
+            /* Print result of interpretation i */
+            Constants.print("| ");
+            /* These following lines duplicate work done in else branch of if */
+            result[i] = processInterpretation(truthTable[i]);
+            Constants.printBoolean(result[i]);
+            if (result[i]) {    /* Is model */
+                Constants.print(Constants.VISUAL_OK);
+                tempModelsList[numModels] = truthTable[i];
+                numModels++;
+            }
+            Constants.println();
+            mainGUI.progressBar.setValue(i);
+        }
+    }
+
     public boolean[] processWithDistances(int initRank, int endRank) {
         numModels = 0;
         toString = "";
